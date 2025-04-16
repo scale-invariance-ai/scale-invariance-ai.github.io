@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scale Invariance | AI & Data Science Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #4f46e5;
+            --text-color: #1f2937;
+            --light-text: #6b7280;
+            --background: #ffffff;
+            --section-bg: #f3f4f6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            color: var(--text-color);
+            background-color: var(--background);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        header {
+            background-color: var(--background);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 201px;
+            height: 64px;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s, transform 0.3s;
+            display: inline-block;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .hero {
+            padding: 5rem 0;
+            background-color: var(--section-bg);
+            text-align: center;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, rgba(79, 70, 229, 0) 70%);
+            animation: pulse 15s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(5%, 5%);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        section {
+            padding: 4rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: var(--primary-color);
+            width: 100%;
+            display: block;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .expertise-item {
+            background-color: var(--section-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .expertise-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-color);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .expertise-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .expertise-item:hover::before {
+            opacity: 0.05;
+        }
+        
+        .expertise-item h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+        
+        .expertise-item:hover h3 {
+            color: var(--accent-color);
+        }
+        
+        .team {
+            background-color: var(--section-bg);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .team-member {
+            background-color: var(--background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            background-color: #e5e7eb;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text);
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .team-member:hover .team-photo {
+            transform: scale(1.1);
+        }
+        
+        .team-member h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .team-member p {
+            color: var(--light-text);
+        }
+        
+        .contact {
+            text-align: center;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        }
+        
+        .contact p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-email {
+            display: inline-block;
+            font-size: 1.5rem;
+            margin: 2rem 0;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-email:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            color: var(--accent-color);
+        }
+        
+        footer {
+            background-color: var(--text-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+        
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .contact-email {
+                font-size: 1.2rem;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <div class="logo animate__animated animate__fadeIn">
+                <img src="SI_logo_Royal_Blue.png" alt="Scale Invariance Logo" style="height: 40px;">
+            </div>
+            <nav class="animate__animated animate__fadeIn">
+                <ul>
+                    <li><a href="#expertise">Expertise</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container hero-content animate__animated animate__fadeIn">
+            <h1 class="animate__animated animate__zoomIn">Scale Invariance</h1>
+            <p class="animate__animated animate__fadeIn animate__delay-1s">Cutting-edge AI and Data Science solutions for the modern enterprise.</p>
+            <a href="#contact" class="btn animate__animated animate__fadeIn animate__delay-1s">Get in Touch</a>
+        </div>
+    </section>
+    
+    <section id="expertise">
+        <div class="container">
+            <h2 class="section-title reveal">Our Expertise</h2>
+            <div class="expertise-grid">
+                <div class="expertise-item reveal">
+                    <h3>GenAI & Agentic AI</h3>
+                </div>
+                <div class="expertise-item reveal">
+                    <h3>AI/ML Data Science</h3>
+                </div>
+                <div class="expertise-item reveal">
+                    <h3>NLP & Deep Learning</h3>
+                </div>
+                <div class="expertise-item reveal">
+                    <h3>Chatbots & Voice Assistants</h3>
+                </div>
+                <div class="expertise-item reveal">
+                    <h3>Vision & Image Analytics</h3>
+                </div>
+                <div class="expertise-item reveal">
+                    <h3>UI/UX Design & Frontend</h3>
+                </div>
+                <div class="expertise-item reveal">
+                    <h3>Predictive & Time Series Modeling</h3>
+                </div>
+                <div class="expertise-item reveal">
+                    <h3>On-prem & Cloud Deployment</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="team" class="team">
+        <div class="container">
+            <h2 class="section-title reveal">Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member reveal">
+                    <div class="team-photo floating">A</div>
+                    <h3>Abhijit</h3>
+                    <p>Program Manager</p>
+                </div>
+                <div class="team-member reveal">
+                    <div class="team-photo floating">B</div>
+                    <h3>Bharad</h3>
+                    <p>AI Engineer</p>
+                </div>
+                <div class="team-member reveal">
+                    <div class="team-photo floating">A</div>
+                    <h3>Akshay</h3>
+                    <p>Full Stack Data Scientist</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title reveal">Contact Us</h2>
+            <p class="reveal">Ready to transform your business with AI?</p>
+            <a href="mailto:scaleinvariance.ai@gmail.com" class="contact-email reveal pulse">scaleinvariance.ai@gmail.com</a>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Scale Invariance. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon">in</a>
+                    <a href="#" class="social-icon">tw</a>
+                    <a href="#" class="social-icon">fb</a>
+                </div>
+                <a href="#" id="backToTop" class="btn">Back to Top</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Back to top button
+        document.getElementById('backToTop').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Reveal animations on scroll
+        function revealOnScroll() {
+            const elements = document.querySelectorAll('.reveal');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        // Add event listener for scroll
+        window.addEventListener('scroll', revealOnScroll);
+        
+        // Initial call to reveal elements that are already in view
+        revealOnScroll();
+    </script>
+</body>
+</html>
